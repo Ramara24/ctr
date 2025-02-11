@@ -1,7 +1,7 @@
 import json
 from typing import List
 import wandb
-from sklearn.metrics import f1_score
+from sklearn.metrics import log_loss
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 import os
@@ -9,8 +9,10 @@ import sys
 from pickle_object import PickleObject
 from constants import PR0JECT_NAME
 
+
+
 class BaseModelPipeline(PickleObject):
-    def __init__(self, steps: List[tuple], grid_search_params: dict[str, dict]=None, scoring=f1_score, random_state=42, result_path: str = ''):
+    def __init__(self, steps: List[tuple], grid_search_params: dict[str, dict]=None, scoring=log_loss, random_state=42, result_path: str = ''):
         """
         Initialize the pipeline.
 
@@ -25,7 +27,7 @@ class BaseModelPipeline(PickleObject):
             for step_name, params in (grid_search_params or {}).items()
             for param_name, values in params.items()
         }
-        self.scoring = scoring
+        self.scoring = scoring  # Now using Logloss
         self.best_model = None
         self.best_score = None
         self.best_params = None
